@@ -1,0 +1,6 @@
+package: ironchip.net/kit
+import:
+- package: github.com/go-kit/kit
+  version: ^0.10.0
+  subpackages:
+  - endpoint
