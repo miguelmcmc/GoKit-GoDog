@@ -37,8 +37,9 @@ func (us *userService) thereAreUsers(usersD *messages.PickleStepArgument_PickleT
 			continue
 		}
 		var user = userIO.User{}
-		user.Name = row.Cells[0].Value
-		user.Email = row.Cells[1].Value
+		user.ID = row.Cells[0].Value
+		user.Name = row.Cells[1].Value
+		user.Email = row.Cells[2].Value
 		err := us.service.Create(us.ctx, user)
 		if err != nil {
 			return err

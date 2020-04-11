@@ -14,14 +14,14 @@ import (
 
 // makeListHandler creates the handler logic
 func makeListHandler(m *mux.Router, endpoints endpoint.Endpoints, options []http.ServerOption) {
-	m.Methods("LIST").Path("/").Handler(handlers.CORS(handlers.AllowedMethods([]string{"LIST"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.ListEndpoint, decodeListRequest, encodeListResponse, options...)))
+	m.Methods("GET").Path("/list").Handler(handlers.CORS(handlers.AllowedMethods([]string{"GET"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.ListEndpoint, decodeListRequest, encodeListResponse, options...)))
 }
 
 // decodeListRequest is a transport/http.DecodeRequestFunc that decodes a
 // JSON-encoded request from the HTTP request body.
 func decodeListRequest(_ context.Context, r *http1.Request) (interface{}, error) {
 	req := endpoint.ListRequest{}
-	err := json.NewDecoder(r.Body).Decode(&req)
+	err := error(nil)
 	return req, err
 }
 
@@ -39,13 +39,20 @@ func encodeListResponse(ctx context.Context, w http1.ResponseWriter, response in
 
 // makeGetHandler creates the handler logic
 func makeGetHandler(m *mux.Router, endpoints endpoint.Endpoints, options []http.ServerOption) {
-	m.Methods("GET").Path("/get/{id}").Handler(handlers.CORS(handlers.AllowedMethods([]string{"POST"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.GetEndpoint, decodeGetRequest, encodeGetResponse, options...)))
+	m.Methods("GET").Path("/get/{id}").Handler(handlers.CORS(handlers.AllowedMethods([]string{"GET"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.GetEndpoint, decodeGetRequest, encodeGetResponse, options...)))
 }
 
 // decodeGetRequest is a transport/http.DecodeRequestFunc that decodes a
 // JSON-encoded request from the HTTP request body.
 func decodeGetRequest(_ context.Context, r *http1.Request) (interface{}, error) {
-	req := endpoint.GetRequest{}
+	vars := mux.Vars(r)
+	id, ok := vars["id"]
+	if !ok {
+		return nil, errors.New("not a valid ID")
+	}
+	req := endpoint.GetRequest{
+		Id: id,
+	}
 	return req, nil
 }
 
@@ -63,7 +70,7 @@ func encodeGetResponse(ctx context.Context, w http1.ResponseWriter, response int
 
 // makeCreateHandler creates the handler logic
 func makeCreateHandler(m *mux.Router, endpoints endpoint.Endpoints, options []http.ServerOption) {
-	m.Methods("POST").Path("/create").Handler(handlers.CORS(handlers.AllowedMethods([]string{"POST"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.CreateEndpoint, decodeCreateRequest, encodeCreateResponse, options...)))
+	m.Methods("POST", "OPTIONS").Path("/create").Handler(handlers.CORS(handlers.AllowedMethods([]string{"POST"}), handlers.AllowedHeaders([]string{"Content-Type", "Content-Length"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.CreateEndpoint, decodeCreateRequest, encodeCreateResponse, options...)))
 }
 
 // decodeCreateRequest is a transport/http.DecodeRequestFunc that decodes a
@@ -88,15 +95,21 @@ func encodeCreateResponse(ctx context.Context, w http1.ResponseWriter, response 
 
 // makeDeleteHandler creates the handler logic
 func makeDeleteHandler(m *mux.Router, endpoints endpoint.Endpoints, options []http.ServerOption) {
-	m.Methods("POST").Path("/delete").Handler(handlers.CORS(handlers.AllowedMethods([]string{"POST"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.DeleteEndpoint, decodeDeleteRequest, encodeDeleteResponse, options...)))
+	m.Methods("GET").Path("/delete/{id}").Handler(handlers.CORS(handlers.AllowedMethods([]string{"GET"}), handlers.AllowedOrigins([]string{"*"}))(http.NewServer(endpoints.DeleteEndpoint, decodeDeleteRequest, encodeDeleteResponse, options...)))
 }
 
 // decodeDeleteRequest is a transport/http.DecodeRequestFunc that decodes a
 // JSON-encoded request from the HTTP request body.
 func decodeDeleteRequest(_ context.Context, r *http1.Request) (interface{}, error) {
-	req := endpoint.DeleteRequest{}
-	err := json.NewDecoder(r.Body).Decode(&req)
-	return req, err
+	vars := mux.Vars(r)
+	id, ok := vars["id"]
+	if !ok {
+		return nil, errors.New("not a valid ID")
+	}
+	req := endpoint.DeleteRequest{
+		Id: id,
+	}
+	return req, nil
 }
 
 // encodeDeleteResponse is a transport/http.EncodeResponseFunc that encodes

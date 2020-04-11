@@ -1,0 +1,26 @@
+@hostname = localhost
+@port = 8081
+@host = {{hostname}}:{{port}}
+
+###
+//Create user
+
+POST http://{{host}}/create HTTP/1.1
+Content-Type: application/json
+
+{"user":{
+    "name":"test user",
+    "email":"test mail"
+}}
+
+###
+// List users
+GET http://{{host}}/list HTTP/1.1
+
+###
+// Get user
+GET http://{{host}}/get/0 HTTP/1.1
+
+###
+// Delete user
+GET http://{{host}}/delete/0 HTTP/1.1
