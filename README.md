@@ -1,32 +1,43 @@
-<h3 align="center">GOkit - GOdog</h3>
+<p align="center">
+  <a href="" rel="noopener">
+ <!-- <img width=200px height=200px src="https://i.imgur.com/FxL5qM0.jpg" alt="Bot logo"></a> -->
+</p>
+
+<h3 align="center">Project Title</h3>
 
 <div align="center">
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
+[![Platform](https://img.shields.io/badge/platform-golang-blue.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](/LICENSE)
 
 </div>
 
 ---
 
-<p align="center"> Few lines describing your project.
-    <br> 
-</p>
 
 ## 📝 Table of Contents
 
 - [About](#about)
+- [Demo / Working](#demo)
 - [Getting Started](#getting_started)
 - [Deployment](#deployment)
 - [Usage](#usage)
 - [Built Using](#built_using)
 - [Authors](#authors)
 
+
 ## 🧐 About <a name = "about"></a>
 
 This project is pure golang.
 Gokit is a microservice kit developer.
 GoDog is a BBD cucumber for testing purpouses.
+
+## 🎥 Demo / Working <a name = "demo"></a>
+
+![Working](godog.png)
+
+--- 
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
