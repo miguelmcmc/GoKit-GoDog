@@ -1,6 +1,20 @@
-Feature: create user
+Feature: users
     In order to manage a company
     I need to be able to manage users
+
+    Scenario: should list no users when empty
+        When I list users
+        Then the response should match:
+            """
+            []
+            """
+
+    Scenario: should create user
+        When I list users
+        Then the response should match:
+            """
+            []
+            """
 
     Scenario: should list users
         Given there are users:
