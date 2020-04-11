@@ -1,10 +1,12 @@
-FROM golang
+FROM golang:alpine
 
-RUN mkdir -p /go/src/ironchip.net/kit
+RUN apk update ; apk add -U --no-cache tzdata bash wget curl git upx ca-certificates
 
-ADD . /go/src/ironchip.net/kit
+WORKDIR /go/src/ironchip.net/kit
 
-RUN go get  -t -v ./...
+ADD . .
+
+RUN GO111MODULE=on go mod download
 RUN go get  github.com/canthefason/go-watcher
 RUN go install github.com/canthefason/go-watcher/cmd/watcher
 

@@ -6,7 +6,7 @@ services:
       dockerfile: users/Dockerfile
     restart: always
     volumes:
-    - .:/go/src/ironchip.net/kit
+      - .:/go/src/ironchip.net/kit
     container_name: users
     ports:
-    - 8800:8081
+      - 8081:8081
