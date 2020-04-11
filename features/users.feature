@@ -1,8 +1,23 @@
 Feature: create user
     In order to manage a company
-    I need to be able to create user
+    I need to be able to manage users
 
-    Scenario: Eat 5 out of 12
-        Given there are 12 godogs
-        When I eat 5
-        Then there should be 7 remaining
+    Scenario: should list users
+        Given there are users:
+            | name | email             |
+            | john | john.doe@mail.com |
+            | jane | jane.doe@mail.com |
+        When I list users
+        Then the response should match:
+            """
+            [
+                {
+                    "name": "john",
+                    "email": "john.doe@mail.com"
+                },
+                {
+                    "name": "jane",
+                    "email": "jane.doe@mail.com"
+                }
+            ]
+            """

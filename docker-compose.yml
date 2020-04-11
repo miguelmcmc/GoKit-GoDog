@@ -1,0 +1,12 @@
+version: "2"
+services:
+  users:
+    build:
+      context: .
+      dockerfile: users/Dockerfile
+    restart: always
+    volumes:
+    - .:/go/src/ironchip.net/kit
+    container_name: users
+    ports:
+    - 8800:8081
