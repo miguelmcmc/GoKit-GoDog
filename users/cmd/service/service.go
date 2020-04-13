@@ -17,7 +17,10 @@ import (
 	opentracinggo "github.com/opentracing/opentracing-go"
 	prometheus1 "github.com/prometheus/client_golang/prometheus"
 	promhttp "github.com/prometheus/client_golang/prometheus/promhttp"
+	grpc1 "google.golang.org/grpc"
 	endpoint "ironchip.net/kit/users/pkg/endpoint"
+	grpc "ironchip.net/kit/users/pkg/grpc"
+	pb "ironchip.net/kit/users/pkg/grpc/pb"
 	http "ironchip.net/kit/users/pkg/http"
 	service "ironchip.net/kit/users/pkg/service"
 	appdash "sourcegraph.com/sourcegraph/appdash"
@@ -87,6 +90,25 @@ func initHttpHandler(endpoints endpoint.Endpoints, g *group.Group) {
 		return http1.Serve(httpListener, httpHandler)
 	}, func(error) {
 		httpListener.Close()
+	})
+
+}
+func initGRPCHandler(endpoints endpoint.Endpoints, g *group.Group) {
+	options := defaultGRPCOptions(logger, tracer)
+	// Add your GRPC options here
+
+	grpcServer := grpc.NewGRPCServer(endpoints, options)
+	grpcListener, err := net.Listen("tcp", *grpcAddr)
+	if err != nil {
+		logger.Log("transport", "gRPC", "during", "Listen", "err", err)
+	}
+	g.Add(func() error {
+		logger.Log("transport", "gRPC", "addr", *grpcAddr)
+		baseServer := grpc1.NewServer()
+		pb.RegisterUsersServer(baseServer, grpcServer)
+		return baseServer.Serve(grpcListener)
+	}, func(error) {
+		grpcListener.Close()
 	})
 
 }

@@ -2,6 +2,7 @@ package endpoint
 
 import (
 	"context"
+
 	endpoint "github.com/go-kit/kit/endpoint"
 	io "ironchip.net/kit/users/pkg/io"
 	service "ironchip.net/kit/users/pkg/service"
